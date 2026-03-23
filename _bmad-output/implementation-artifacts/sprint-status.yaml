@@ -1,0 +1,37 @@
+generated: 2026-03-18T20:15:00
+last_updated: 2026-03-19T18:30:00
+project: poc-bmad
+project_key: NOKEY
+tracking_system: file-system
+story_location: _bmad-output/implementation-artifacts
+development_status:
+  epic-1: in-progress
+  1-1-set-up-initial-project-from-starter-baseline-next-js-auth-js-prisma-postgres: review
+  1-2-configure-sso-authentication-auth-js-session-strategy: review
+  1-3-persist-user-profile-from-sso-claims-identity-mapping: review
+  1-4-role-model-authorization-guardrails-employee-vs-support-vs-admin: review
+  epic-1-retrospective: optional
+ epic-2: in-progress
+  2-1-slot-inventory-baseline-list-legend-employee-visible: review
+  2-2-date-selection-for-availability: review
+  2-3-availability-states-in-grid-available-vs-reserved: review
+  2-4-select-slot-progressive-disclosure-selection-summary: review
+  2-5-reserve-selected-slot-happy-path-receipt-consistency: review
+  2-6-conflict-on-reserve-already-reserved-with-in-context-recovery: review
+  2-7-my-reservations-list-cancel-entry-point: review
+  2-8-cancel-reservation-happy-path-idempotent-feel: review
+  2-9-ownership-enforcement-on-cancel-employee-only: review
+  2-10-ux-baseline-quality-for-core-flow-loading-accessibility-responsive-grid: backlog
+  epic-2-retrospective: optional
+  epic-3: backlog
+  3-1-reservation-persistence-slot-date-uniqueness-invariant: backlog
+  3-2-audit-trail-for-reservation-lifecycle-events-employee-actions: backlog
+  3-3-consistent-api-error-semantics-for-conflicts-and-safe-errors: backlog
+  epic-3-retrospective: optional
+  epic-4: backlog
+  4-1-admin-support-reservation-search-by-employee-date-slot: backlog
+  4-2-admin-support-audit-trail-viewer-for-a-reservation: backlog
+  4-3-controlled-correction-cancel-invalid-reservation-with-reason-audit: backlog
+  4-4-controlled-correction-reassign-reservation-ownership-with-reason-audit: backlog
+  epic-4-retrospective: optional
+

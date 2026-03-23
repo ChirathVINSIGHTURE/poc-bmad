@@ -1,0 +1,644 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>poc-bmad — UX Design Directions</title>
+    <style>
+      :root{
+        --bg: #fcfcfd;
+        --surface: #ffffff;
+        --surface-2: #f9fafb;
+        --text: #1d2939;
+        --muted: #475467;
+        --border: #e5e7eb;
+        --primary: #0182cb;
+        --primary-2: #01a3fe;
+        --accent: #ff8102;
+        --danger: #ea4747;
+        --shadow: 0 10px 30px rgba(16,24,40,.08);
+        --radius: 16px;
+        --radius-sm: 12px;
+        --space-1: 8px;
+        --space-2: 12px;
+        --space-3: 16px;
+        --space-4: 24px;
+        --space-5: 32px;
+        --mono: ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
+        --sans: system-ui,-apple-system,"Segoe UI",Roboto,Inter,Arial,sans-serif;
+      }
+
+      *{ box-sizing: border-box; }
+      html,body{ height:100%; }
+      body{
+        margin:0;
+        font-family: var(--sans);
+        color: var(--text);
+        background:
+          radial-gradient(1200px 600px at 20% -10%, rgba(1,130,203,.12), transparent 60%),
+          radial-gradient(1000px 500px at 90% 0%, rgba(255,129,2,.10), transparent 55%),
+          var(--bg);
+      }
+
+      a{ color: var(--primary); text-decoration: none; }
+      a:hover{ text-decoration: underline; }
+
+      header{
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        backdrop-filter: blur(10px);
+        background: rgba(252,252,253,.75);
+        border-bottom: 1px solid var(--border);
+      }
+      .wrap{ max-width: 1200px; margin: 0 auto; padding: var(--space-4); }
+      .topbar{
+        display:flex;
+        align-items:flex-start;
+        justify-content:space-between;
+        gap: var(--space-4);
+      }
+      h1{
+        margin: 0 0 6px;
+        font-size: 22px;
+        letter-spacing: -0.02em;
+      }
+      .subtitle{
+        margin:0;
+        color: var(--muted);
+        font-size: 14px;
+        line-height: 1.4;
+      }
+      .pill{
+        display:inline-flex;
+        align-items:center;
+        gap:8px;
+        border:1px solid var(--border);
+        background: rgba(255,255,255,.8);
+        border-radius: 999px;
+        padding: 10px 12px;
+        box-shadow: 0 6px 16px rgba(16,24,40,.06);
+      }
+      .pill strong{ font-size: 12px; }
+      .pill span{ font-family: var(--mono); font-size: 12px; color: var(--muted); }
+      .legend{
+        display:flex;
+        gap:10px;
+        flex-wrap:wrap;
+        margin-top: 12px;
+      }
+      .swatch{
+        display:flex;
+        align-items:center;
+        gap:8px;
+        border:1px solid var(--border);
+        background:#fff;
+        border-radius:999px;
+        padding: 6px 10px;
+        font-size: 12px;
+        color: var(--muted);
+      }
+      .dot{ width:10px; height:10px; border-radius:999px; background: var(--border); }
+
+      main{ padding-bottom: 64px; }
+      .grid{
+        display:grid;
+        grid-template-columns: repeat(12, 1fr);
+        gap: var(--space-4);
+      }
+      .card{
+        background: rgba(255,255,255,.88);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        overflow:hidden;
+      }
+      .cardHeader{
+        padding: var(--space-4);
+        border-bottom: 1px solid var(--border);
+        display:flex;
+        align-items:flex-start;
+        justify-content:space-between;
+        gap: var(--space-3);
+        background: linear-gradient(180deg, rgba(255,255,255,.95), rgba(249,250,251,.85));
+      }
+      .cardHeader h2{
+        margin:0 0 4px;
+        font-size: 16px;
+        letter-spacing: -0.01em;
+      }
+      .cardHeader p{
+        margin:0;
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.35;
+      }
+      .badge{
+        display:inline-flex;
+        align-items:center;
+        gap:6px;
+        padding: 6px 10px;
+        border-radius: 999px;
+        border: 1px solid rgba(1,130,203,.20);
+        background: rgba(1,130,203,.08);
+        color: #0368b1;
+        font-size: 12px;
+        white-space: nowrap;
+      }
+      .badge.orange{
+        border-color: rgba(255,129,2,.22);
+        background: rgba(255,129,2,.10);
+        color: #cc6702;
+      }
+
+      .cardBody{ padding: var(--space-4); }
+      .cols{
+        display:grid;
+        grid-template-columns: 1.3fr 1fr;
+        gap: var(--space-4);
+      }
+      .screen{
+        border:1px solid var(--border);
+        border-radius: 18px;
+        background: var(--surface);
+        overflow:hidden;
+      }
+      .screenTop{
+        padding: 14px 14px 12px;
+        border-bottom:1px solid var(--border);
+        background: linear-gradient(180deg, #ffffff, #fcfcfd);
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        gap: 10px;
+      }
+      .screenTop .title{
+        display:flex;
+        flex-direction:column;
+        gap:2px;
+      }
+      .screenTop .title strong{ font-size: 13px; letter-spacing: -0.01em; }
+      .screenTop .title span{ font-size: 12px; color: var(--muted); }
+      .btn{
+        border:1px solid rgba(1,130,203,.25);
+        background: linear-gradient(180deg, rgba(1,163,254,.18), rgba(1,130,203,.10));
+        color: #0368b1;
+        border-radius: 999px;
+        padding: 8px 10px;
+        font-size: 12px;
+        cursor: pointer;
+        user-select:none;
+      }
+      .btn:active{ transform: translateY(1px); }
+      .btn.primary{
+        border-color: rgba(1,130,203,.30);
+        background: linear-gradient(180deg, rgba(1,163,254,.90), rgba(1,130,203,.90));
+        color:#fff;
+      }
+      .btn.danger{
+        border-color: rgba(234,71,71,.28);
+        background: rgba(234,71,71,.10);
+        color: #b42318;
+      }
+      .btn.ghost{
+        border-color: var(--border);
+        background: #fff;
+        color: var(--text);
+      }
+
+      .screenBody{ padding: 14px; }
+      .statusRow{
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        gap: 12px;
+        padding: 12px;
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        background: var(--surface-2);
+      }
+      .statusRow strong{ font-size: 13px; }
+      .statusRow span{ display:block; font-size: 12px; color: var(--muted); margin-top: 2px; }
+      .statusTag{
+        font-size: 12px;
+        padding: 6px 8px;
+        border-radius: 999px;
+        border: 1px solid rgba(255,129,2,.25);
+        background: rgba(255,129,2,.10);
+        color: #cc6702;
+        white-space: nowrap;
+      }
+
+      .seatGrid{
+        margin-top: 14px;
+        display:grid;
+        grid-template-columns: repeat(6, 1fr);
+        gap: 10px;
+      }
+      .seat{
+        border:1px solid var(--border);
+        border-radius: 12px;
+        padding: 10px 8px;
+        text-align:center;
+        font-size: 12px;
+        color: var(--text);
+        background: #fff;
+      }
+      .seat small{ display:block; color: var(--muted); font-size: 11px; margin-top: 2px; }
+      .seat.available{ border-color: rgba(1,130,203,.22); background: rgba(1,130,203,.05); }
+      .seat.reserved{ background: rgba(152,162,179,.18); color: rgba(29,41,57,.70); border-color: rgba(152,162,179,.30); }
+      .seat.selected{ border-color: rgba(255,129,2,.35); background: rgba(255,129,2,.12); box-shadow: 0 8px 18px rgba(255,129,2,.14); }
+
+      .notes h3{ margin:0 0 8px; font-size: 13px; }
+      .notes ul{ margin: 0; padding-left: 18px; color: var(--muted); font-size: 13px; line-height: 1.5; }
+      .notes li{ margin: 6px 0; }
+
+      .twoScreens{
+        display:grid;
+        grid-template-columns: 1fr 1fr;
+        gap: var(--space-3);
+        margin-top: var(--space-3);
+      }
+
+      .footer{
+        margin-top: 18px;
+        font-size: 12px;
+        color: var(--muted);
+      }
+
+      /* Layout */
+      .span-12{ grid-column: span 12; }
+      @media (min-width: 980px){
+        .span-6{ grid-column: span 6; }
+      }
+      @media (max-width: 720px){
+        .cols{ grid-template-columns: 1fr; }
+        .seatGrid{ grid-template-columns: repeat(4, 1fr); }
+        .twoScreens{ grid-template-columns: 1fr; }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="wrap">
+        <div class="topbar">
+          <div>
+            <h1>poc-bmad — UX design directions</h1>
+            <p class="subtitle">
+              6 visual directions based on Insighture-inspired cleanliness (A) + inventory-first booking grid (C).
+              Use this to pick a base direction or combine elements.
+            </p>
+            <div class="legend" aria-label="Palette legend">
+              <div class="swatch"><span class="dot" style="background:#0182cb"></span>Primary #0182CB</div>
+              <div class="swatch"><span class="dot" style="background:#ff8102"></span>Accent #FF8102</div>
+              <div class="swatch"><span class="dot" style="background:#1d2939"></span>Text #1D2939</div>
+              <div class="swatch"><span class="dot" style="background:#fcfcfd;border:1px solid #e5e7eb"></span>BG #FCFCFD</div>
+            </div>
+          </div>
+          <div class="pill" role="note" aria-label="How to use">
+            <strong>Tip</strong>
+            <span>Scroll → pick 1–2 favorites</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="wrap">
+      <div class="grid">
+
+        <!-- Direction 1 -->
+        <section class="card span-12" id="dir-1">
+          <div class="cardHeader">
+            <div>
+              <h2>Direction 1 — “Airy corporate + status banner”</h2>
+              <p>High whitespace, strong hierarchy. Status banner answers “Do I have a spot?” instantly.</p>
+            </div>
+            <div class="badge">A (Insighture airy)</div>
+          </div>
+          <div class="cardBody">
+            <div class="cols">
+              <div class="screen" aria-label="Dashboard mock">
+                <div class="screenTop">
+                  <div class="title">
+                    <strong>Parking reservations</strong>
+                    <span>Tue, 18 Mar</span>
+                  </div>
+                  <button class="btn primary">Reserve</button>
+                </div>
+                <div class="screenBody">
+                  <div class="statusRow">
+                    <div>
+                      <strong>No reservation for this date</strong>
+                      <span>Pick any available slot below.</span>
+                    </div>
+                    <div class="statusTag">Available</div>
+                  </div>
+                  <div class="seatGrid" aria-label="Slots grid">
+                    <div class="seat available">P01<small>Available</small></div>
+                    <div class="seat reserved">P02<small>Reserved</small></div>
+                    <div class="seat available selected">P03<small>Selected</small></div>
+                    <div class="seat reserved">P04<small>Reserved</small></div>
+                    <div class="seat available">P05<small>Available</small></div>
+                    <div class="seat available">P06<small>Available</small></div>
+                    <div class="seat reserved">P07<small>Reserved</small></div>
+                    <div class="seat available">P08<small>Available</small></div>
+                    <div class="seat available">P09<small>Available</small></div>
+                    <div class="seat reserved">P10<small>Reserved</small></div>
+                    <div class="seat available">P11<small>Available</small></div>
+                    <div class="seat available">P12<small>Available</small></div>
+                  </div>
+                  <div class="footer">Feedback style: toast on success + inline conflict message near the status banner.</div>
+                </div>
+              </div>
+              <div class="notes">
+                <h3>Why it fits</h3>
+                <ul>
+                  <li>Status-first layout supports “certainty over anxiety”.</li>
+                  <li>Inventory grid is present but visually light.</li>
+                  <li>Best when your Phase 1 flow is one-step reserve (no holds).</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Direction 2 -->
+        <section class="card span-12" id="dir-2">
+          <div class="cardHeader">
+            <div>
+              <h2>Direction 2 — “Inventory-first booking”</h2>
+              <p>The grid is the hero. Minimal chrome. Designed for fast scanning and seat-map familiarity.</p>
+            </div>
+            <div class="badge orange">C (booking-first)</div>
+          </div>
+          <div class="cardBody">
+            <div class="cols">
+              <div class="screen" aria-label="Inventory-first mock">
+                <div class="screenTop">
+                  <div class="title">
+                    <strong>Select a slot</strong>
+                    <span>Tue, 18 Mar</span>
+                  </div>
+                  <button class="btn">Change date</button>
+                </div>
+                <div class="screenBody">
+                  <div class="seatGrid">
+                    <div class="seat available">P01<small>Free</small></div>
+                    <div class="seat available">P02<small>Free</small></div>
+                    <div class="seat reserved">P03<small>Taken</small></div>
+                    <div class="seat reserved">P04<small>Taken</small></div>
+                    <div class="seat available selected">P05<small>Selected</small></div>
+                    <div class="seat available">P06<small>Free</small></div>
+                    <div class="seat reserved">P07<small>Taken</small></div>
+                    <div class="seat available">P08<small>Free</small></div>
+                    <div class="seat available">P09<small>Free</small></div>
+                    <div class="seat reserved">P10<small>Taken</small></div>
+                    <div class="seat available">P11<small>Free</small></div>
+                    <div class="seat available">P12<small>Free</small></div>
+                  </div>
+                  <div style="display:flex; gap:10px; margin-top: 14px;">
+                    <button class="btn ghost" style="flex:1">Clear</button>
+                    <button class="btn primary" style="flex:2">Confirm reservation</button>
+                  </div>
+                </div>
+              </div>
+              <div class="notes">
+                <h3>Why it fits</h3>
+                <ul>
+                  <li>Matches the user mental model (seat selection / booking).</li>
+                  <li>Strong for mobile scanning—tap a slot, commit.</li>
+                  <li>Pairs well with a future “hold” pattern if flow becomes multi-step.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Direction 3 -->
+        <section class="card span-12" id="dir-3">
+          <div class="cardHeader">
+            <div>
+              <h2>Direction 3 — “Airy + split view (My reservation always visible)”</h2>
+              <p>Desktop-first layout where the current reservation receipt is pinned alongside the grid.</p>
+            </div>
+            <div class="badge">A+C</div>
+          </div>
+          <div class="cardBody">
+            <div class="cols">
+              <div class="screen" aria-label="Split view mock">
+                <div class="screenTop">
+                  <div class="title">
+                    <strong>Tue, 18 Mar</strong>
+                    <span>Your reservation & availability</span>
+                  </div>
+                  <button class="btn">My reservations</button>
+                </div>
+                <div class="screenBody">
+                  <div class="twoScreens" aria-label="Two panel layout">
+                    <div class="statusRow">
+                      <div>
+                        <strong>Reserved: P07</strong>
+                        <span>Arrive and park in P07.</span>
+                      </div>
+                      <button class="btn danger">Cancel</button>
+                    </div>
+                    <div class="statusRow" style="border-color: rgba(1,130,203,.20); background: rgba(1,130,203,.04);">
+                      <div>
+                        <strong>Need to change?</strong>
+                        <span>Cancel then select a new slot.</span>
+                      </div>
+                      <button class="btn">Support</button>
+                    </div>
+                  </div>
+                  <div class="seatGrid" style="margin-top: 16px;">
+                    <div class="seat reserved">P01<small>Reserved</small></div>
+                    <div class="seat reserved">P02<small>Reserved</small></div>
+                    <div class="seat reserved">P03<small>Reserved</small></div>
+                    <div class="seat reserved">P04<small>Reserved</small></div>
+                    <div class="seat available">P05<small>Available</small></div>
+                    <div class="seat available">P06<small>Available</small></div>
+                    <div class="seat selected">P07<small>Yours</small></div>
+                    <div class="seat available">P08<small>Available</small></div>
+                    <div class="seat available">P09<small>Available</small></div>
+                    <div class="seat reserved">P10<small>Reserved</small></div>
+                    <div class="seat available">P11<small>Available</small></div>
+                    <div class="seat available">P12<small>Available</small></div>
+                  </div>
+                </div>
+              </div>
+              <div class="notes">
+                <h3>Why it fits</h3>
+                <ul>
+                  <li>Maximizes “receipt/contract” visibility (trust).</li>
+                  <li>Works very well for desktop; responsive can collapse into stacked cards.</li>
+                  <li>Encourages a clear policy: change = cancel + rebook.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Direction 4 -->
+        <section class="card span-12" id="dir-4">
+          <div class="cardHeader">
+            <div>
+              <h2>Direction 4 — “Progressive disclosure (airiest)”</h2>
+              <p>Everything is calm. Grid starts simple; details only appear after selecting a slot.</p>
+            </div>
+            <div class="badge">A</div>
+          </div>
+          <div class="cardBody">
+            <div class="cols">
+              <div class="screen" aria-label="Progressive disclosure mock">
+                <div class="screenTop">
+                  <div class="title">
+                    <strong>Reserve a slot</strong>
+                    <span>Tue, 18 Mar</span>
+                  </div>
+                  <button class="btn">Change date</button>
+                </div>
+                <div class="screenBody">
+                  <div class="seatGrid">
+                    <div class="seat available">P01</div>
+                    <div class="seat reserved">P02</div>
+                    <div class="seat available">P03</div>
+                    <div class="seat reserved">P04</div>
+                    <div class="seat available selected">P05</div>
+                    <div class="seat available">P06</div>
+                    <div class="seat reserved">P07</div>
+                    <div class="seat available">P08</div>
+                    <div class="seat available">P09</div>
+                    <div class="seat reserved">P10</div>
+                    <div class="seat available">P11</div>
+                    <div class="seat available">P12</div>
+                  </div>
+                  <div class="statusRow" style="margin-top: 14px;">
+                    <div>
+                      <strong>Selected: P05</strong>
+                      <span>Tap confirm to reserve.</span>
+                    </div>
+                    <button class="btn primary">Confirm</button>
+                  </div>
+                </div>
+              </div>
+              <div class="notes">
+                <h3>Why it fits</h3>
+                <ul>
+                  <li>Very clean; reduces cognitive load for first-time users.</li>
+                  <li>Good for mobile; selection summary becomes the only “form”.</li>
+                  <li>Risk: some users may want more info (zones/labels) in the grid.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Direction 5 -->
+        <section class="card span-12" id="dir-5">
+          <div class="cardHeader">
+            <div>
+              <h2>Direction 5 — “Inventory + soft hold (future-ready)”</h2>
+              <p>Introduces the concept of a time-boxed hold, inspired by seat booking flows.</p>
+            </div>
+            <div class="badge orange">C (hold-ready)</div>
+          </div>
+          <div class="cardBody">
+            <div class="cols">
+              <div class="screen" aria-label="Hold concept mock">
+                <div class="screenTop">
+                  <div class="title">
+                    <strong>Select a slot</strong>
+                    <span>Hold window: 15:00</span>
+                  </div>
+                  <button class="btn">Help</button>
+                </div>
+                <div class="screenBody">
+                  <div class="statusRow" style="border-color: rgba(255,129,2,.25); background: rgba(255,129,2,.08);">
+                    <div>
+                      <strong>P05 is held for you</strong>
+                      <span>Confirm within 15 minutes to secure it.</span>
+                    </div>
+                    <button class="btn primary">Confirm</button>
+                  </div>
+                  <div class="seatGrid">
+                    <div class="seat available">P01<small>Free</small></div>
+                    <div class="seat reserved">P02<small>Taken</small></div>
+                    <div class="seat reserved">P03<small>Taken</small></div>
+                    <div class="seat available">P04<small>Free</small></div>
+                    <div class="seat selected">P05<small>Held</small></div>
+                    <div class="seat available">P06<small>Free</small></div>
+                    <div class="seat reserved">P07<small>Taken</small></div>
+                    <div class="seat available">P08<small>Free</small></div>
+                    <div class="seat available">P09<small>Free</small></div>
+                    <div class="seat reserved">P10<small>Taken</small></div>
+                    <div class="seat available">P11<small>Free</small></div>
+                    <div class="seat available">P12<small>Free</small></div>
+                  </div>
+                </div>
+              </div>
+              <div class="notes">
+                <h3>Why it fits</h3>
+                <ul>
+                  <li>Best if the reservation becomes multi-step (policy confirmation, extra metadata, etc.).</li>
+                  <li>Not necessary for one-step reserve; can be deferred to Phase 2.</li>
+                  <li>If implemented, the hold must be explicit and time-boxed to avoid “phantom selection”.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Direction 6 -->
+        <section class="card span-12" id="dir-6">
+          <div class="cardHeader">
+            <div>
+              <h2>Direction 6 — “Airy + admin/support pathway visible”</h2>
+              <p>Employee UI stays calm, but the “arrival problem” pathway is deliberately surfaced.</p>
+            </div>
+            <div class="badge">A+C</div>
+          </div>
+          <div class="cardBody">
+            <div class="cols">
+              <div class="screen" aria-label="Arrival support pathway mock">
+                <div class="screenTop">
+                  <div class="title">
+                    <strong>Reserved: P07</strong>
+                    <span>Tue, 18 Mar</span>
+                  </div>
+                  <button class="btn danger">Cancel</button>
+                </div>
+                <div class="screenBody">
+                  <div class="statusRow">
+                    <div>
+                      <strong>You’re set.</strong>
+                      <span>Park in P07 today.</span>
+                    </div>
+                    <div class="statusTag" style="border-color:rgba(1,130,203,.25);background:rgba(1,130,203,.08);color:#0368b1;">Reserved</div>
+                  </div>
+                  <div class="statusRow" style="margin-top: 12px; border-color: rgba(234,71,71,.18); background: rgba(234,71,71,.06);">
+                    <div>
+                      <strong>Spot occupied?</strong>
+                      <span>Open a support request with your reservation.</span>
+                    </div>
+                    <button class="btn">Contact support</button>
+                  </div>
+                  <div class="footer">This direction encodes “arrival protection” into the UI so users feel supported.</div>
+                </div>
+              </div>
+              <div class="notes">
+                <h3>Why it fits</h3>
+                <ul>
+                  <li>Directly supports Step 4 emotional goals (not abandoned when issues happen).</li>
+                  <li>Minimizes UI complexity: the pathway is present only when it matters (reserved state).</li>
+                  <li>Works with both employee + support/admin journeys.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </main>
+  </body>
+</html>
+
