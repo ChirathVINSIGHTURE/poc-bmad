@@ -1,0 +1,121 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  employee
+  support
+  admin
+}
+
+enum ActorType {
+  employee
+  support
+  admin
+}
+
+model User {
+  id           String        @id @default(cuid())
+  name         String?
+  email        String?       @unique
+  emailVerified DateTime?
+  image        String?
+
+  employeeId  String        @unique
+  displayName String?
+  role         Role          @default(employee)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  accounts    Account[]
+  sessions    Session[]
+
+  reservations Reservation[] @relation("ReservationOwner")
+  auditEvents  AuditEvent[]  @relation("AuditActor")
+}
+
+model Slot {
+  id      String        @id @default(cuid())
+  slotId  String        @unique
+  createdAt DateTime     @default(now())
+
+  reservations Reservation[] @relation("ReservationSlot")
+}
+
+model Account {
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+
+  refresh_token    String?
+  access_token     String?
+  expires_at       Int?
+  token_type       String?
+  scope             String?
+  id_token         String?
+  session_state    String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([provider, providerAccountId])
+}
+
+model Session {
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@id([identifier, token])
+}
+
+model Reservation {
+  id         String   @id @default(cuid())
+
+  slotId     String
+  date       DateTime @db.Date
+  employeeId String
+  createdAt  DateTime @default(now())
+
+  slot Slot @relation("ReservationSlot", fields: [slotId], references: [slotId])
+  user User @relation("ReservationOwner", fields: [employeeId], references: [employeeId])
+
+  auditEvents AuditEvent[] @relation("ReservationAudit")
+
+  @@unique([slotId, date])
+  @@index([employeeId, date])
+}
+
+model AuditEvent {
+  id        String     @id @default(cuid())
+  timestamp DateTime   @default(now())
+
+  actorType ActorType
+  actorId   String?
+  action    String
+
+  reservationId String?
+  slotId        String?
+  date          DateTime? @db.Date
+
+  reason   String?
+  metadata Json?
+
+  actor User? @relation("AuditActor", fields: [actorId], references: [employeeId])
+
+  reservation Reservation? @relation("ReservationAudit", fields: [reservationId], references: [id])
+}
+

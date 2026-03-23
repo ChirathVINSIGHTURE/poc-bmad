@@ -1,0 +1,10 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Minimal global defaults for a predictable baseline */
+html,
+body {
+  height: 100%;
+}
+

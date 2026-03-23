@@ -1,0 +1,49 @@
+# Dependencies
+node_modules/
+
+# Next.js
+.next/
+out/
+
+# Production / build
+build/
+dist/
+
+# Environment (keep `.env.example` committed)
+.env
+.env.*
+!.env.example
+
+# Debug / logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# TypeScript
+*.tsbuildinfo
+
+# Testing / coverage
+coverage/
+.nyc_output/
+
+# Vercel
+.vercel
+
+# Prisma (generated client is in node_modules; local DB files if any)
+*.db
+*.db-journal
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE / editors
+.idea/
+*.swp
+*.swo
+*~
+
+# Optional: uncomment if you use these tools
+# .turbo
+# .eslintcache
